@@ -24,8 +24,48 @@ class USMap {
         .append("path")
         .attr("d", this.geoPath)
         .style("stroke", "black")
-        .style("fill", "red")
+        .style("fill", "white")
     }
+  }
+
+  applyHeatMap(heatData) {
+    var maxFreq = d3.max(heatData, function(d) {
+      if (d)
+        return d3.max(d, function(d) {
+          if (d != undefined)
+            return d;
+          return 0;
+        })
+      return 0;
+    });
+
+    var minFreq = d3.min(heatData, function(d) {
+      if (d)
+        return d3.max(d, function(d) {
+          if (d != undefined)
+            return d;
+          return 0;
+        });
+      return 0;
+    });
+
+    var colorScale = d3.scaleSequential(d3.interpolateRdYlGn).domain([minFreq, maxFreq]);
+
+    this.paths.style("fill", function(d) {
+      var stateFips = parseInt(d.properties.STATE);
+      var czFips = parseInt(d.properties.COUNTY);
+
+      if (heatData[stateFips]) {
+        var frequency = heatData[stateFips][czFips]
+        if (frequency != undefined) {
+          return colorScale(frequency);
+        } else {
+          return "white";
+        }
+      } else {
+        return "white";
+      }
+    });
   }
 
 }
