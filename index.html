@@ -8,6 +8,7 @@
     <script src="js/d3.layout.cloud.js"></script>
     <script src="js/EventData.js"></script>
     <script src="js/Cloud.js"></script>
+    <script src="js/USMap.js"></script>
   </head>
   <body>
     <div id="cloudContainer"></div>
@@ -33,9 +34,10 @@
       ];
 
 
-      e = new EventData("data/StormEvents_2014.csv", "data/us-states.json");
+      e = new EventData("data/StormEvents_2014.csv", "data/us-counties.json");
 
       e.on("data", function(data) {
+          console.log(data)
           states = {}
           for(var i = 0; i < data[0].length; i++) {
             if (stateList.indexOf(data[0][i].STATE.toLowerCase().capitalize()) == -1)
@@ -68,37 +70,11 @@
           c.svg.style.height = 400;
           c.data = words
 
-        /*
-        var layout = d3.layout.cloud()
-              .size([1000, 1000])
-              .words(words)
-              .padding(5)
-              .rotate(function() { return 0; })
-              .font("Impact")
-              .fontSize(function(d) { return scale(d.size); })
-              .on("end", draw);
-
-        layout.start();
-
-
-
-        function draw(words) {
-            svg
-                .attr("width", layout.size()[0])
-                .attr("height", layout.size()[1])
-                .append("g")
-                .attr("transform", "translate(" + layout.size()[0] / 2 + "," + layout.size()[1] / 2 + ")")
-                .selectAll("text")
-                .data(words)
-                .enter().append("text")
-                .style("font-size", function(d) { return d.size + "px"; })
-                .style("font-family", "Impact")
-                .attr("text-anchor", "middle")
-                .attr("transform", function(d) {
-                    return "translate(" + [d.x, d.y] + ")rotate(" + d.rotate + ")";
-                })
-                .text(function(d) { return d.text; });
-        };*/
+          const map = new USMap(800,800);
+          map.data = data[1].features;
+          map.draw();
+          map.svg.width = 400;
+          document.body.appendChild(map.svg);
       })
       e.init()
 
