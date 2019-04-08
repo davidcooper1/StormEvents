@@ -1,51 +1,103 @@
 <!DOCTYPE html>
 
 <meta charset="utf-8">
+<html>
+  <head>
+    <script src="js/data_polyfill.js"></script>
+    <script src="js/d3.v5.js"></script>
+    <script src="js/d3.layout.cloud.js"></script>
+    <script src="js/EventData.js"></script>
+  </head>
+  <body>
+    <div id="cloudContainer"></div>
+    <div id="mapContainer"></div>
 
-<!-- Load d3.js -->
-<script src="http://d3js.org/d3.v4.js"></script>
+    <script>
 
-<!-- Load d3-cloud -->
-<script src="https://cdn.jsdelivr.net/gh/holtzy/D3-graph-gallery@master/LIB/d3.layout.cloud.js"></script>
+      var stateList = [
+      "Average",
+      "Alabama", "Alaska", "Arizona", "Arkansas",
+      "California", "Colorado", "Connecticut", "Delaware",
+      "Florida", "Georgia", "Hawaii", "Idaho",
+      "Illinois", "Indiana", "Iowa", "Kansas",
+      "Kentucky", "Louisiana", "Maine", "Maryland",
+      "Massachusetts", "Michigan", "Minnesota", "Mississippi",
+      "Missouri", "Montana", "Nebraska", "Nevada",
+      "New Hampshire", "New Jersey", "New Mexico", "New York",
+      "North Carolina", "North Dakota", "Ohio", "Oklahoma",
+      "Oregon", "Pennsylvania", "Rhode Island", "South Carolina",
+      "South Dakota", "Tennessee", "Texas", "Utah",
+      "Vermont", "Virginia", "Washington", "West Virginia",
+      "Wisconsin", "Wyoming"
+      ];
 
-<body>
-<script>
+      e = new EventData("csv/StormEvents_2014.csv");
 
-    svg = d3.select("body").append("svg");
+      e.on("data", function(data) {
+          states = {}
+          for(var i = 0; i < data[0].length; i++) {
+            if (stateList.indexOf(data[0][i].STATE.toLowerCase().capitalize()) == -1)
+              continue
+            if (states[data[0][i].STATE])
+              states[data[0][i].STATE]++;
+            else
+              states[data[0][i].STATE] = 1
+          };
 
-    var layout = d3.layout.cloud()
-        .size([500, 500])
-        .words([
-            "Hello", "world", "normally", "you", "want", "more", "words",
-            "than", "this"].map(function(d) {
-            return {text: d, size: 10 + Math.random() * 90, test: "haha"};
-        }))
-        .padding(5)
-        .rotate(function() { return ~~(Math.random() * 2) * 90; })
-        .font("Impact")
-        .fontSize(function(d) { return d.size; })
-        .on("end", draw);
+          svg = d3.select("body").append("svg");
 
-    layout.start();
+          words = []
+          for (key in states) {
+            words[words.length] = {text: key, size: states[key]};
+          };
+
+          console.log(words)
+
+          words.sort(function(a, b) { return a.size - b.size; });
+
+          var scale = d3.scaleLinear().range([20, 30]);
+          scale.domain([d3.min(words, function(d) {return d.size; }),
+            d3.max(words, function(d) { return d.size; })]);
+
+          var layout = d3.layout.cloud()
+              .size([2000, 2000])
+              /*.words([
+                  "Hello", "world", "normally", "you", "want", "more", "words",
+                  "than", "this"].map(function(d) {
+                  return {text: d, size: 10 + Math.random() * 90, test: "haha"};
+              }))*/
+              .words(words)
+              .padding(5)
+              .rotate(function() { return 0; })
+              .font("Impact")
+              .fontSize(function(d) { return scale(d.size); })
+              .on("end", draw);
+
+          layout.start();
 
 
 
-    function draw(words) {
-        svg
-            .attr("width", layout.size()[0])
-            .attr("height", layout.size()[1])
-            .append("g")
-            .attr("transform", "translate(" + layout.size()[0] / 2 + "," + layout.size()[1] / 2 + ")")
-            .selectAll("text")
-            .data(words)
-            .enter().append("text")
-            .style("font-size", function(d) { return d.size + "px"; })
-            .style("font-family", "Impact")
-            .attr("text-anchor", "middle")
-            .attr("transform", function(d) {
-                return "translate(" + [d.x, d.y] + ")rotate(" + d.rotate + ")";
-            })
-            .text(function(d) { return d.text; });
-    }
-</script>
-<body>
+          function draw(words) {
+              svg
+                  .attr("width", layout.size()[0])
+                  .attr("height", layout.size()[1])
+                  .append("g")
+                  .attr("transform", "translate(" + layout.size()[0] / 2 + "," + layout.size()[1] / 2 + ")")
+                  .selectAll("text")
+                  .data(words)
+                  .enter().append("text")
+                  .style("font-size", function(d) { return d.size + "px"; })
+                  .style("font-family", "Impact")
+                  .attr("text-anchor", "middle")
+                  .attr("transform", function(d) {
+                      return "translate(" + [d.x, d.y] + ")rotate(" + d.rotate + ")";
+                  })
+                  .text(function(d) { return d.text; });
+          };
+      })
+      e.init()
+
+
+    </script>
+  </body>
+</html>
