@@ -31,7 +31,7 @@
       "Wisconsin", "Wyoming"
       ];
 
-      e = new EventData("csv/StormEvents_2014.csv");
+      e = new EventData("data/StormEvents_2014.csv", "data/us-states.json");
 
       e.on("data", function(data) {
           states = {}
