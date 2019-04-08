@@ -37,25 +37,32 @@
       e = new EventData("data/StormEvents_2014.csv", "data/us-counties.json");
 
       e.on("data", function(data) {
-          console.log(data)
           states = {}
+          counties = []
           for(var i = 0; i < data[0].length; i++) {
             if (stateList.indexOf(data[0][i].STATE.toLowerCase().capitalize()) == -1)
               continue
+            if (counties[data[0][i].STATE_FIPS]) {
+              if (counties[data[0][i].STATE_FIPS][data[0][i].CZ_FIPS] == undefined)
+                counties[data[0][i].STATE_FIPS][data[0][i].CZ_FIPS] = 1;
+              else
+                counties[data[0][i].STATE_FIPS][data[0][i].CZ_FIPS]++;
+            } else {
+              counties[data[0][i].STATE_FIPS] = [];
+              counties[data[0][i].STATE_FIPS][data[0][i].CZ_FIPS] = 1;
+            }
             if (states[data[0][i].STATE])
               states[data[0][i].STATE]++;
             else
               states[data[0][i].STATE] = 1
           };
-
+          console.log(counties);
           svg = d3.select("body").append("svg");
 
           words = []
           for (key in states) {
             words[words.length] = {text: key, size: states[key]};
           };
-
-          console.log(words)
 
           words.sort(function(a, b) { return a.size - b.size; });
 

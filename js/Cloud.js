@@ -10,7 +10,6 @@ class Cloud {
         this.g = d3.select(this.svg)
             .attr("viewBox", "0 0 " + this.width + " " + this.height)
             .append("g");
-        console.log(this.g)
         this.layout = d3.layout.cloud()
             .size([this.width, this.height])
             .words(this.d)
@@ -23,8 +22,6 @@ class Cloud {
     }
 
     draw() {
-        console.log(this.layout.size());
-        console.log("translate(" + this.layout.size()[0] / 2 + "," + this.layout.size()[1] / 2 + ")")
         this.g
             .attr("transform", "translate(" + this.layout.size()[0] / 2 + "," + this.layout.size()[1] / 2 + ")")
             .selectAll("text")
