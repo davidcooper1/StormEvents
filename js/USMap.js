@@ -31,7 +31,7 @@ class USMap {
   getAreaArray() {
     let areas = []
     this.paths.each(function(d) {
-      areas[areas.length] = turf.area(d) / 100000;
+      areas[areas.length] = turf.area(d) / 1000;
     });
     return areas;
   }
@@ -62,6 +62,7 @@ class USMap {
       if (heatData[stateFips]) {
         let frequency = heatData[stateFips][czFips];
         if (frequency != undefined) {
+          let area = turf.area(d) / 1000;
           // COMPUTE NORMALIZED
         } else {
           heatData[stateFips][czFips] = 0;
