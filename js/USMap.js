@@ -28,7 +28,55 @@ class USMap {
     }
   }
 
+  getAreaArray() {
+    let areas = []
+    this.paths.each(function(d) {
+      areas[areas.length] = turf.area(d) / 100000;
+    });
+    return areas;
+  }
+
+  normalizeHeatMap(heatData) {
+    let areas = this.getAreaArray();
+    let areaAverage = d3.mean(areas, function(d) { return d; });
+    let areaDeviation = d3.deviation(areas, function(d) { return d; });
+
+    let frequencies = []
+    for (let state in heatData) {
+      for (let county in heatData[state]) {
+        frequencies[frequencies.length] = heatData[state][county];
+      }
+    }
+
+    for (let i = 0; i < areas.length - frequencies.length; i++) {
+      frequencies[frequencies.length] = 0;
+    }
+
+    let freqAverage = d3.mean(frequencies, function(d) { return d; });
+    let freqDeviation = d3.deviation(frequencies, function(d) { return d; });
+
+    this.paths.each(function(d) {
+      let stateFips = parseInt(d.properties.STATE);
+      let czFips = parseInt(d.properties.COUNTY);
+
+      if (heatData[stateFips]) {
+        let frequency = heatData[stateFips][czFips];
+        if (frequency != undefined) {
+          // COMPUTE NORMALIZED
+        } else {
+          heatData[stateFips][czFips] = 0;
+        }
+      } else {
+        heatData[stateFips] = [];
+        heatData[stateFips][czFips] = 0;
+      }
+    });
+  }
+
   applyHeatMap(heatData) {
+
+    this.normalizeHeatMap(heatData);
+
     var maxFreq = d3.max(heatData, function(d) {
       if (d)
         return d3.max(d, function(d) {
@@ -39,17 +87,7 @@ class USMap {
       return 0;
     });
 
-    var minFreq = d3.min(heatData, function(d) {
-      if (d)
-        return d3.max(d, function(d) {
-          if (d != undefined)
-            return d;
-          return 0;
-        });
-      return 0;
-    });
-
-    var colorScale = d3.scaleSequential(d3.interpolateRdYlGn).domain([minFreq, maxFreq]);
+    var colorScale = d3.scaleSequential(d3.interpolateYlOrRd).domain([0, maxFreq]);
 
     this.paths.style("fill", function(d) {
       var stateFips = parseInt(d.properties.STATE);
