@@ -3,7 +3,7 @@ class USMap {
     this.width = width
     this.height = height
     this.svg = document.createElementNS(d3.namespaces.svg, "svg");
-    d3.select(this.svg)
+    this.content = d3.select(this.svg)
       .attr("viewBox", "0 0 " + this.width + " " + this.height)
       .append("g");
     this.usa = d3.geoAlbersUsa()
@@ -17,7 +17,7 @@ class USMap {
 
   draw() {
     if (!this.paths) {
-      this.paths = d3.select(this.svg)
+      this.paths = this.content
         .selectAll("path")
         .data(this.data)
         .enter()
