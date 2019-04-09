@@ -1,0 +1,19 @@
+body {
+    background-color: black;
+}
+
+svg {
+    background-color: steelblue;
+}
+
+h2 {
+    color: whitesmoke;
+}
+
+.right {
+    text-align: right ;
+}
+
+.center {
+    text-align: center;
+}
