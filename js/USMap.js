@@ -2,10 +2,38 @@ class USMap {
   constructor(width, height) {
     this.width = width
     this.height = height
+    var colorScale = d3.scaleSequential(d3.interpolateInferno)
+        .domain([0, this.width/2])
     this.svg = document.createElementNS(d3.namespaces.svg, "svg");
     this.content = d3.select(this.svg)
       .attr("viewBox", "0 0 " + this.width + " " + this.height)
       .append("g");
+    this.bars = this.content.selectAll("rect")
+        .data(d3.range(this.width/2), function(d) { return d; })
+        .enter().append("rect")
+        .attr("class", "bars")
+        .attr("x", function(d, i) { return i; })
+        .attr("y", this.height * .9)
+        .attr("height", 20)
+        .attr("width", 1)
+        .style("fill", function(d, i ) { return colorScale(d); }.bind(this));
+    var frame = d3.select(this.svg)
+        .append("rect")
+        .attr("x", "0")
+        .attr("y", this.height * 0.9)
+        .attr("width", this.width / 2)
+        .attr("height", "20")
+        .attr("fill","none")
+        .attr("stroke","black");
+    this.title = d3.select(this.svg)
+        .append("text")
+        .attr("x", (this.width / 2))
+        .attr("y", 15)
+        .attr("text-anchor", "middle")
+        .style("font-size", "20px")
+        .style("font-color", "red")
+        .style("text-decoration", "underline")
+        .text("Event Frequency by County (Normalized)");
     this.usa = d3.geoAlbersUsa()
       .translate([this.width / 2, this.height / 2])
       .scale([1000]);
