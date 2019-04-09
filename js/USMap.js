@@ -31,45 +31,23 @@ class USMap {
   getAreaArray() {
     let areas = []
     this.paths.each(function(d) {
-      areas[areas.length] = turf.area(d) / 1000;
+      areas[areas.length] = Math.sqrt(turf.area(d) / 1000000);
     });
     return areas;
   }
 
   normalizeHeatMap(heatData) {
-    let areas = this.getAreaArray();
-    let areaAverage = d3.mean(areas, function(d) { return d; });
-    let areaDeviation = d3.deviation(areas, function(d) { return d; });
-
-    let frequencies = []
-    for (let state in heatData) {
-      for (let county in heatData[state]) {
-        frequencies[frequencies.length] = heatData[state][county];
-      }
-    }
-
-    for (let i = 0; i < areas.length - frequencies.length; i++) {
-      frequencies[frequencies.length] = 0;
-    }
-
-    let freqAverage = d3.mean(frequencies, function(d) { return d; });
-    let freqDeviation = d3.deviation(frequencies, function(d) { return d; });
-
     this.paths.each(function(d) {
       let stateFips = parseInt(d.properties.STATE);
       let czFips = parseInt(d.properties.COUNTY);
+      d3.select(this).attr("id", d.properties.STATE + "-" + d.properties.COUNTY);
 
       if (heatData[stateFips]) {
         let frequency = heatData[stateFips][czFips];
         if (frequency != undefined) {
-          let area = turf.area(d) / 1000;
-          // COMPUTE NORMALIZED
-        } else {
-          heatData[stateFips][czFips] = 0;
+          let area = Math.sqrt(turf.area(d) / 1000000);
+          heatData[stateFips][czFips] = frequency / area;
         }
-      } else {
-        heatData[stateFips] = [];
-        heatData[stateFips][czFips] = 0;
       }
     });
   }
@@ -88,7 +66,20 @@ class USMap {
       return 0;
     });
 
-    var colorScale = d3.scaleSequential(d3.interpolateYlOrRd).domain([0, maxFreq]);
+    var minFreq = d3.min(heatData, function(d) {
+      if (d)
+        return d3.min(d, function(d) {
+          if (d != undefined)
+            return d;
+          return 0;
+        });
+        return 0;
+    });
+
+    var colorScale = d3.scaleSequential(d3.interpolateInferno).domain([minFreq, maxFreq]);
+
+    console.log(maxFreq);
+    console.log(heatData);
 
     this.paths.style("fill", function(d) {
       var stateFips = parseInt(d.properties.STATE);
@@ -99,10 +90,10 @@ class USMap {
         if (frequency != undefined) {
           return colorScale(frequency);
         } else {
-          return "white";
+          return colorScale(0);
         }
       } else {
-        return "white";
+        return colorScale(0);
       }
     });
   }
