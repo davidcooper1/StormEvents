@@ -8,6 +8,7 @@
     <script src="js/data_polyfill.js"></script>
     <script src="js/d3.v5.js"></script>
     <script src="js/d3.layout.cloud.js"></script>
+    <script src="js/turf.min.js"></script>
     <script src="js/EventData.js"></script>
     <script src="js/Cloud.js"></script>
     <script src="js/USMap.js"></script>
@@ -16,7 +17,7 @@
     <script src="js/bootstrap.min.js"></script>
   </head>
   <body class="container">
-  <div class="w-100 container">
+  <div class="container">
     <div class="row">
       <div class="col-sm-2">
         <h2>UI left</h2>
@@ -63,28 +64,21 @@
 
       e = new EventData("data/StormEvents_2014.csv", "data/us-counties.json");
 
+      eventData = [];
+      let map, cloud;
+
       e.on("data", function(data) {
           states = {}
           counties = []
-          for(var i = 0; i < data[0].length; i++) {
-            if (stateList.indexOf(data[0][i].STATE) == -1)
-              continue
-            if (counties[data[0][i].STATE_FIPS]) {
-              if (counties[data[0][i].STATE_FIPS][data[0][i].CZ_FIPS] == undefined)
-                counties[data[0][i].STATE_FIPS][data[0][i].CZ_FIPS] = 1;
-              else
-                counties[data[0][i].STATE_FIPS][data[0][i].CZ_FIPS]++;
-            } else {
-              counties[data[0][i].STATE_FIPS] = [];
-              counties[data[0][i].STATE_FIPS][data[0][i].CZ_FIPS] = 1;
-            }
-            if (states[data[0][i].STATE])
-              states[data[0][i].STATE]++;
-            else
-              states[data[0][i].STATE] = 1
-          };
-          //svg = d3.select("body").append("svg");
 
+          map = new USMap(800,600);
+          map.data = data[1].features;
+          map.draw();
+          map.svg.style.width = "5000px";
+          //map.applyHeatMap(counties);
+          $("#mapContainer").append(map.svg);
+
+          console.log(states);
           words = []
           for (key in states) {
             words[words.length] = {text: key, size: states[key]};
@@ -101,14 +95,34 @@
           $("#cloudContainer").append(c.svg);
           c.data = words
 
-          const map = new USMap(800,600);
-          map.data = data[1].features;
-          map.draw();
-          map.applyHeatMap(counties);
-          $("#mapContainer").append(map.svg);
+          eventData = data[0];
 
       })
       e.init()
+
+      function filterEvents(filter) {
+        let heatData = []
+        filter = new RegExp(filter);
+        for (let i = 0; i < eventData.length; i++) {
+          if (stateList.indexOf(eventData[i].STATE) == -1)
+            continue;
+          if (filter.test(eventData[i].EVENT_TYPE)) {
+            let stateFips = eventData[i].STATE_FIPS;
+            let czFips = eventData[i].CZ_FIPS;
+
+            if (heatData[stateFips]) {
+              if (heatData[stateFips][czFips] == undefined)
+                heatData[stateFips][czFips] = 1;
+              else
+                heatData[stateFips][czFips]++;
+            } else {
+              heatData[stateFips] = [];
+              heatData[stateFips][czFips] = 1;
+            }
+          }
+        }
+        map.applyHeatMap(heatData);
+      }
 
 
     </script>
