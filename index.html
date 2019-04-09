@@ -16,33 +16,32 @@
     <script src="js/jquery-3.3.1.slim.min.js"></script>
     <script src="js/bootstrap.min.js"></script>
   </head>
-  <body class="container">
-  <div class="container">
-    <div class="row">
-      <div class="col-sm-2">
-        <h2>UI left</h2>
+  <body>
+    <div class="container-fluid">
+      <div class="row" style="height: 600px">
+        <div class="col-4">
+            <div class="card w-100 h-100">
+              <div class="card-header bg-primary text-white ">Categories:</div>
+              <div class="card-body">
+
+              </div>
+          </div>
+        </div>
+        <div id="cloudContainer" class="col-8">
+          <h2 class="center">Word Cloud</h2>
+        </div>
       </div>
-      <div id="cloudContainer" class="col-sm-8">
-        <h2 class="center">Word Cloud</h2>
-      </div>
-      <div  class="col-sm-2">
-        <h2 class ="right">UI right</h2>
+      <div class="row">
+        <div class="col-sm-2">
+          <h2>UI left</h2>
+        </div>
+        <div id="mapContainer" class="col-sm-8">
+        </div>
+        <div  class="col-sm-2">
+          <h2 class ="right" >UI right</h2>
+        </div>
       </div>
     </div>
-  </div>
-  <div class="container">
-    <div class="row">
-      <div class="col-sm-2">
-        <h2>UI left</h2>
-      </div>
-      <div id="mapContainer" class="col-sm-8">
-        <h2 class="center">US Map</h2>
-      </div>
-      <div  class="col-sm-2">
-        <h2 class ="right" >UI right</h2>
-      </div>
-    </div>
-  </div>
     <script>
 
       var stateList = [
@@ -74,26 +73,10 @@
           map = new USMap(800,600);
           map.data = data[1].features;
           map.draw();
-          map.svg.style.width = "5000px";
-          //map.applyHeatMap(counties);
           $("#mapContainer").append(map.svg);
 
-          console.log(states);
-          words = []
-          for (key in states) {
-            words[words.length] = {text: key, size: states[key]};
-          };
-
-          words.sort(function(a, b) { return a.size - b.size; });
-
-          var scale = d3.scaleLinear().range([20, 30]);
-          scale.domain([d3.min(words, function(d) {return d.size; }),
-            d3.max(words, function(d) { return d.size; })]);
-
-          const c = new Cloud(800, 800);
-
+          cloud = new Cloud(800, 800);
           $("#cloudContainer").append(c.svg);
-          c.data = words
 
           eventData = data[0];
 
