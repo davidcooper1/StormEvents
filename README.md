@@ -15,3 +15,7 @@ The libraries used on this project consist of JQuery, Turf, Bootstrap, and D3. T
 [https://getbootstrap.com/docs/4.0/getting-started/download/](https://getbootstrap.com/docs/4.0/getting-started/download/).
 
 [https://d3js.org/](https://d3js.org/).
+
+## US Map of Storm Events
+
+This US map is split up by county and displays a normalized version of the data set given to use by the NOAA storm events database. We did calculations on the occurences to account for some counties being larger sized than others. With this in mind, it allowed us to get a more accurate view on which counties had a higher number of occurences per area.
