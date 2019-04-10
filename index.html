@@ -24,36 +24,11 @@
             <div class="card w-100" style="height:400px">
               <div class="card-header bg-primary text-white">Categories:</div>
               <div class="card-body">
-                <ul class="list-group" style="height: 250px">
-                  <li class="list-group-item"> List Item </li>
-                  <li class="list-group-item"> List Item </li>
-                  <li class="list-group-item"> List Item </li>
-                  <li class="list-group-item"> List Item </li>
-                  <li class="list-group-item"> List Item </li>
-                  <li class="list-group-item"> List Item </li>
-                  <li class="list-group-item"> List Item </li>
-                  <li class="list-group-item"> List Item </li>
-                  <li class="list-group-item"> List Item </li>
-                  <li class="list-group-item"> List Item </li>
-                  <li class="list-group-item"> List Item </li>
-                  <li class="list-group-item"> List Item </li>
-                  <li class="list-group-item"> List Item </li>
-                  <li class="list-group-item"> List Item </li>
-                  <li class="list-group-item"> List Item </li>
-                  <li class="list-group-item"> List Item </li>
-                  <li class="list-group-item"> List Item </li>
-                  <li class="list-group-item"> List Item </li>
-                  <li class="list-group-item"> List Item </li>
-                  <li class="list-group-item"> List Item </li>
-                  <li class="list-group-item"> List Item </li>
-                  <li class="list-group-item"> List Item </li>
-                  <li class="list-group-item"> List Item </li>
-                  <li class="list-group-item"> List Item </li>
-                  <li class="list-group-item"> List Item </li>
+                <ul id="catList" class="list-group" style="height: 250px">
                 </ul>
                 <div class="btn-group-prepend"  role="group"  style="padding-top: 15px">
-                  <button type="button" class="btn btn-primary">Select All</button>
-                  <button type="button" style="width: 90px" class="btn btn-primary">Reset</button>
+                  <button id="select" type="button" class="btn btn-primary">Select All</button>
+                  <button id="reset" type="button" style="width: 90px" class="btn btn-primary">Reset</button>
                 </div>
                 </div>
           </div>
@@ -78,6 +53,12 @@
           <div class="card w-100" style="height:400px">
             <div class="card-header bg-primary text-white">Map Controls</div>
             <div class="card-body">
+              <div class="input-group mb-3">
+                <div class="input-group-prepend">
+                  <button id="norm" class="btn btn-outline-secondary normoption" onclick="normRaw(this)" type="button">Normalized</button>
+                  <button id="raw" class="btn btn-outline-secondary normoption active" onclick="normRaw(this)" style="width: 107px" type="button">Raw</button>
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -135,8 +116,59 @@
           eventData = data[0]
           filter = new DataFilter(data[0]);
 
+          for (var i = 0; i < filter.listEventTypes().length; i++){
+            let newLi = "<li class=\"list-group-item\">" + filter.listEventTypes()[i] + "</li>";
+            $("#catList").append(newLi);
+          }
+
+          $("li").on("click", function(e) {
+            let ele = $(this);
+            if (ele.hasClass("active"))
+              ele.removeClass("active");
+            else
+              ele.addClass("active");
+            selectEvents();
+          });
+
+
+
+          $("#select").on("click", function(e) {
+            $("li").addClass("active");
+            selectEvents();
+          })
+          $("#reset").on("click", function(e) {
+            $("li").removeClass("active");
+            selectEvents();
+          })
+          $(".normoption").on("click", normRaw);
       })
       e.init()
+
+      function selectEvents() {
+        let eventRegexStr = "";
+        $("li").each(function() {
+          let ele = $(this);
+          if (ele.hasClass("active"))
+            eventRegexStr += ((eventRegexStr == "") ? "" : "|") + ele.text();
+        });
+        console.log(eventRegexStr);
+        filter.filterEvents(eventRegexStr);
+        map.applyHeatMap(filter.heatMap, needsNormalize());
+      }
+      function normRaw(e) {
+        let ele = $(this);
+        var isNorm = ele.attr('id') == "norm"
+        if (isNorm)
+          $("#raw").removeClass("active");
+        else
+          $("#norm").removeClass("active");
+        ele.addClass("active");
+        map.applyHeatMap(filter.heatMap, needsNormalize());
+      }
+
+      function needsNormalize() {
+        return $("#norm").hasClass("active");
+      }
     </script>
   </body>
 </html>
