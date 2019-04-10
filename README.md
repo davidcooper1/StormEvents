@@ -9,6 +9,9 @@ We used [the NOAA Storm Events](https://www.ncdc.noaa.gov/stormevents/) database
 The libraries used on this project consist of JQuery, Turf, Bootstrap, and D3. The links can be found here:
 
 [https://jquery.com/download/](https://jquery.com/download/).
+
 [https://github.com/Turfjs/turf](https://github.com/Turfjs/turf).
+
 [https://getbootstrap.com/docs/4.0/getting-started/download/](https://getbootstrap.com/docs/4.0/getting-started/download/).
+
 [https://d3js.org/](https://d3js.org/).
