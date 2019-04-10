@@ -41,7 +41,7 @@ class USMap {
         .enter()
         .append("path")
         .attr("d", this.geoPath)
-        .style("stroke", "none")
+        .style("stroke", "black")
         .style("fill", "white")
     }
   }
