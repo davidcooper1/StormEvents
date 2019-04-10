@@ -8,9 +8,6 @@ class DataFilter {
     let types = [];
     for (let i = 0; i < this.data.length; i++) {
       let type = this.data[i].EVENT_TYPE;
-      if (type == "Hurricane (Typhoon)") {
-        console.log(this.data[i].STATE_FIPS + " " + this.data[i].CZ_FIPS);
-      }
       if (types.indexOf(type) == -1)
         types[types.length] = type;
     }

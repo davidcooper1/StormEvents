@@ -5,6 +5,15 @@
     overflow-y: scroll;
 }
 
+.bg-dark-red {
+  background-color: darkred;
+}
+
+.opt-selected {
+  background-color: #868e96;
+  color: white;
+}
+
 ul {
     margin: 0;
     padding: 0;
