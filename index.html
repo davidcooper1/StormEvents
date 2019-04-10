@@ -12,6 +12,7 @@
     <script src="js/EventData.js"></script>
     <script src="js/Cloud.js"></script>
     <script src="js/USMap.js"></script>
+    <script src="js/DataFilter.js"></script>
     <script src="js/popper.min.js"></script>
     <script src="js/jquery-3.3.1.slim.min.js"></script>
     <script src="js/bootstrap.min.js"></script>
@@ -107,9 +108,8 @@
 
 
       e = new EventData("data/StormEvents_2014.csv", "data/us-counties.json");
-
-      eventData = [];
-      let map, cloud;
+      let eventData = [];
+      let map, cloud, filter;
 
       e.on("data", function(data) {
           states = {}
@@ -132,36 +132,11 @@
           console.log(words);
           cloud.data = words;
 
-          eventData = data[0];
+          eventData = data[0]
+          filter = new DataFilter(data[0]);
 
       })
       e.init()
-
-      function filterEvents(filter, useNormalization) {
-        let heatData = []
-        filter = new RegExp(filter);
-        for (let i = 0; i < eventData.length; i++) {
-          if (stateList.indexOf(eventData[i].STATE) == -1)
-            continue;
-          if (filter.test(eventData[i].EVENT_TYPE)) {
-            let stateFips = eventData[i].STATE_FIPS;
-            let czFips = eventData[i].CZ_FIPS;
-
-            if (heatData[stateFips]) {
-              if (heatData[stateFips][czFips] == undefined)
-                heatData[stateFips][czFips] = 1;
-              else
-                heatData[stateFips][czFips]++;
-            } else {
-              heatData[stateFips] = [];
-              heatData[stateFips][czFips] = 1;
-            }
-          }
-        }
-        map.applyHeatMap(heatData, useNormalization);
-      }
-
-
     </script>
   </body>
 </html>
