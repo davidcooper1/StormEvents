@@ -55,9 +55,15 @@ class USMap {
   }
 
   normalizeHeatMap(heatData) {
+    let counties = [];
+
     this.paths.each(function(d) {
       let stateFips = parseInt(d.properties.STATE);
       let czFips = parseInt(d.properties.COUNTY);
+      counties[counties.length] = {
+        "state": stateFips,
+        "county" : czFips
+      };
       d3.select(this).attr("id", d.properties.STATE + "-" + d.properties.COUNTY);
 
       if (heatData[stateFips]) {
@@ -68,10 +74,27 @@ class USMap {
         }
       }
     });
+
+    console.log(counties);
+    for (let state in heatData) {
+      for (let county in heatData[state]) {
+        let isValid = false;
+        for (let i = 0; i < counties.length; i++) {
+          if (counties[i].state == state && counties[i].county == county) {
+            isValid = true;
+            break;
+          }
+        }
+        if (!isValid) {
+          heatData[state][county] = undefined;
+          console.log(state + " " + county);
+        }
+      }
+    }
+
   }
 
   applyHeatMap(heatData, useNormalization) {
-
     if (useNormalization)
       this.normalizeHeatMap(heatData);
 
