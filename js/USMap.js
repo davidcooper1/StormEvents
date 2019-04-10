@@ -41,7 +41,7 @@ class USMap {
         .enter()
         .append("path")
         .attr("d", this.geoPath)
-        .style("stroke", "black")
+        .style("stroke", "none")
         .style("fill", "white")
     }
   }
@@ -74,24 +74,6 @@ class USMap {
         }
       }
     });
-
-    console.log(counties);
-    for (let state in heatData) {
-      for (let county in heatData[state]) {
-        let isValid = false;
-        for (let i = 0; i < counties.length; i++) {
-          if (counties[i].state == state && counties[i].county == county) {
-            isValid = true;
-            break;
-          }
-        }
-        if (!isValid) {
-          heatData[state][county] = undefined;
-          console.log(state + " " + county);
-        }
-      }
-    }
-
   }
 
   applyHeatMap(heatData, useNormalization) {
