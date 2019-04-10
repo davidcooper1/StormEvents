@@ -152,6 +152,7 @@
             eventRegexStr += ((eventRegexStr == "") ? "" : "|") + ele.text();
         });
         console.log(eventRegexStr);
+        filter.reset();
         filter.filterEvents(eventRegexStr);
         map.applyHeatMap(filter.heatMap, needsNormalize());
       }

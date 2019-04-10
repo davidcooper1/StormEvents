@@ -14,14 +14,52 @@ class DataFilter {
     return types.sort();
   }
 
-  filterEvents(typeFilter) {
+  filterEvents(typeFilter, words) {
     typeFilter = new RegExp(typeFilter);
-    this.filteredData = [];
+    let newData = [];
 
-    for (let i = 0; i < this.data.length; i++) {
-      if (typeFilter.test(this.data[i].EVENT_TYPE))
-        this.filteredData[this.filteredData.length] = this.data[i];
+    for (let i = 0; i < this.filteredData.length; i++) {
+      if (!typeFilter.test(this.filteredData[i].EVENT_TYPE))
+        continue;
+
+      if (!words) {
+        newData[newData.length] = this.filteredData[i];
+        continue;
+      }
+
+      let description = this.filteredData[i].EVENT_NARRATIVE.split(" ");
+
+      description.forEach(function(entry, index) {
+        let match = /[a-zA-Z]+/.exec(this[index]);
+        if (match != null) {
+          this[index] = match[0].toLowerCase();
+        } else {
+          this[index] = null;
+        }
+      }, description);
+
+      description.filter(function(entry) {
+        return entry != null;
+      })
+
+      let shouldAdd = true;
+      for (let j = 0; j < words.length; j++) {
+        if (description.indexOf(words[j]) == -1) {
+          shouldAdd = false;
+          break;
+        }
+      }
+
+      if (shouldAdd) {
+        newData[newData.length] = this.filteredData[i];
+      }
     }
+
+    this.filteredData = newData;
+  }
+
+  reset() {
+    this.filteredData = this.data;
   }
 
   get heatMap() {
