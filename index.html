@@ -18,27 +18,42 @@
   </head>
   <body>
     <div class="container-fluid">
-      <div class="row" style="height: 600px">
-        <div class="col-4">
-            <div class="card w-100 h-100">
-              <div class="card-header bg-primary text-white ">Categories:</div>
+      <div class="row">
+        <div class="col-4 p-0">
+            <div class="card w-100" style="height:400px">
+              <div class="card-header bg-primary text-white">Categories:</div>
               <div class="card-body">
 
               </div>
           </div>
         </div>
-        <div id="cloudContainer" class="col-8">
-          <h2 class="center">Word Cloud</h2>
+        <div class="col-4 p-0">
+          <div id="cloudContainer" class="card w-100" style="height:400px">
+            <div class="card-header bg-primary text-white">Word Map</div>
+            <div class="m-0 p-0">
+            </div>
+          </div>
+        </div>
+        <div class="col-4 p-0">
+          <div class="card w-100" style="height:400px">
+            <div class="card-header bg-primary text-white">Words Used</div>
+            <div class="card-body">
+            </div>
+          </div>
         </div>
       </div>
       <div class="row">
-        <div class="col-sm-2">
-          <h2>UI left</h2>
+        <div class="col-4 p-0">
+          <div class="card w-100" style="height:400px">
+            <div class="card-header bg-primary text-white">Map Controls</div>
+            <div class="card-body">
+            </div>
+          </div>
         </div>
-        <div id="mapContainer" class="col-sm-8">
-        </div>
-        <div  class="col-sm-2">
-          <h2 class ="right" >UI right</h2>
+        <div class="col-8 p-0">
+          <div id="mapContainer" class="card w-100" style="height: 400px">
+            <div class="card-header bg-primary text-white">Frequency Map</div>
+          </div>
         </div>
       </div>
     </div>
@@ -70,7 +85,7 @@
           states = {}
           counties = []
 
-          map = new USMap(800,600);
+          map = new USMap(800,500);
           map.data = data[1].features;
           map.draw();
           $("#mapContainer").append(map.svg);
@@ -78,13 +93,21 @@
           words = []
           cloud = new Cloud(800, 800);
           $("#cloudContainer").append(cloud.svg);
+          //$(cloud.svg).addClass("card-img-bottom");
+          //$(cloud.svg).addClass("h-100");
+          //cloud.svg.style.height = "100%";
+          words = "Hi how are you my name is David. Good to meet you.".split(" ").map(function(x) {
+            return {text: x, size: 20};
+          });
+          console.log(words);
+          cloud.data = words;
 
           eventData = data[0];
 
       })
       e.init()
 
-      function filterEvents(filter) {
+      function filterEvents(filter, useNormalization) {
         let heatData = []
         filter = new RegExp(filter);
         for (let i = 0; i < eventData.length; i++) {
@@ -105,7 +128,7 @@
             }
           }
         }
-        map.applyHeatMap(heatData);
+        map.applyHeatMap(heatData, useNormalization);
       }
 
 

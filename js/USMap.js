@@ -24,16 +24,6 @@ class USMap {
         .attr("width", this.width / 2)
         .attr("height", "20")
         .attr("fill","none")
-        .attr("stroke","black");
-    this.title = d3.select(this.svg)
-        .append("text")
-        .attr("x", (this.width / 2))
-        .attr("y", 15)
-        .attr("text-anchor", "middle")
-        .style("font-size", "20px")
-        .style("font-color", "red")
-        .style("text-decoration", "underline")
-        .text("Event Frequency by County (Normalized)");
     this.usa = d3.geoAlbersUsa()
       .translate([this.width / 2, this.height / 2])
       .scale([1000]);
@@ -80,9 +70,10 @@ class USMap {
     });
   }
 
-  applyHeatMap(heatData) {
+  applyHeatMap(heatData, useNormalization) {
 
-    this.normalizeHeatMap(heatData);
+    if (useNormalization)
+      this.normalizeHeatMap(heatData);
 
     var maxFreq = d3.max(heatData, function(d) {
       if (d)

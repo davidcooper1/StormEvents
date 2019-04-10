@@ -3,9 +3,6 @@ class Cloud {
         this.d = [];
         this.height = height;
         this.width = width;
-        this.scale = d3.scaleLinear().range([20, 30]);
-        this.scale.domain([d3.min(words, function(d) {return d.size; }),
-            d3.max(words, function(d) { return d.size; })]);
         this.svg = document.createElementNS(d3.namespaces.svg, "svg");
         this.g = d3.select(this.svg)
             .attr("viewBox", "0 0 " + this.width + " " + this.height)
@@ -16,7 +13,7 @@ class Cloud {
             .padding(5)
             .rotate(function() { return 0; })
             .font("Impact")
-            .fontSize(function(d) { return this.scale(d.size); }.bind(this))
+            .fontSize(function(d) { return d.size })
             .on("end", this.draw.bind(this));
         //this.layout.start();
     }
@@ -37,7 +34,9 @@ class Cloud {
     }
     set data(newData) {
         this.d = newData;
-        this.layout.words(this.d)
+        this.layout
+          .words(this.d)
+          //.fontSize(function(d) { return this.size; });
         this.layout.start();
     }
     get data() {
