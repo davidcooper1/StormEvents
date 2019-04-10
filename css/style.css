@@ -1,0 +1,21 @@
+.scrollable {
+    flex: 1 1 0; /* flex: 1, which you had before, is equivalent but doesn't work */
+    display: flex;
+    flex-direction: column;
+    overflow-y: scroll;
+}
+
+ul {
+    margin: 0;
+    padding: 0;
+    overflow-y: scroll;
+    border: 2px solid #ccc;
+    font-size: 16px;
+    font-family: Arial, sans-serif;
+    -webkit-overflow-scrolling: touch;
+}
+
+li {
+    padding: 10px 20px;
+    border-bottom: 1px solid #ccc;
+}
