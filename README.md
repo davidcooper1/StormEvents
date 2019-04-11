@@ -23,4 +23,4 @@ This US map is split up by county and displays a normalized version of the data 
 
 ## Word Cloud
 
-
+The Word Cloud displays the top 50 terms that occur the most in the descriptions of events. When selecting an event type in the category selector, it filters to get the top 50 terms of the description only of the event type selected. The size of the font of each word is based on the number of time that word occurs in the given descriptions. The words themselves are clickable and when clicked on add the clicked word to the Words Used tab. These words now filter the descriptions for the top 50 related words to the event selected and the words selected.
