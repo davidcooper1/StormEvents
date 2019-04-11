@@ -6,7 +6,8 @@ We used [the NOAA Storm Events](https://www.ncdc.noaa.gov/stormevents/) database
 
 ## Libraries
 
-The libraries used on this project consist of JQuery, Turf, Bootstrap, and D3. The links can be found here:
+The libraries used on this project consist of JQuery, Turf, Bootstrap, and D3. We used JQuery for smooth DOM manipulation, Turf allows us to draw the paths for each county, Bootstrap for readable UI elements, and D3 for constructing the visualizations.
+The links for each can be found here:
 
 [https://jquery.com/download/](https://jquery.com/download/).
 
