@@ -3,6 +3,7 @@ class Cloud {
         this.d = [];
         this.height = height;
         this.width = width;
+        this.scale = d3.scaleLinear().range([20, 50]);
         this.svg = document.createElementNS(d3.namespaces.svg, "svg");
         this.g = d3.select(this.svg)
             .attr("viewBox", "0 0 " + this.width + " " + this.height)
@@ -13,7 +14,7 @@ class Cloud {
             .padding(5)
             .rotate(function() { return 0; })
             .font("Impact")
-            .fontSize(function(d) { return d.size })
+            .fontSize(function(d) { return this.scale(d.size); }.bind(this))
             .on("end", this.draw.bind(this));
         //this.layout.start();
     }
@@ -34,9 +35,12 @@ class Cloud {
     }
     set data(newData) {
         this.d = newData;
+        this.scale.domain(d3.extent(newData, function(d) {
+            return d.size;
+        }));
         this.layout
           .words(this.d)
-          //.fontSize(function(d) { return this.size; });
+          .fontSize(function(d) { return this.scale(d.size); }.bind(this));
         this.layout.start();
     }
     get data() {
