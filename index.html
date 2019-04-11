@@ -167,7 +167,7 @@
         });
         words = filter.filterEvents("", getUsedWords())
         console.log(words);
-        cloud.data = words;
+        cloud.data = words.splice(0,50);
         map.applyHeatMap(filter.heatMap, needsNormalize());
       }
 
@@ -175,9 +175,8 @@
         let words = []
         $("#alertList").children().each(function (e) {
           let word = $(this).attr("word");
-          words[words.length] = word;
+          words[words.length] = word.trim();
         });
-        console.log(words);
         return words;
       }
 

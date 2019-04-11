@@ -46,7 +46,7 @@ class DataFilter {
             break;
           let index;
           if ((index = words.indexOf(description[i])) != -1) {
-            words.splice(index, 1);
+            copy.splice(index, 1);
           }
         }
         if (words.length == 0) {
@@ -78,9 +78,17 @@ class DataFilter {
       return b.size - a.size;
     });
 
-    return commonWords.filter(function(entry) {
-      return words.indexOf(entry.text) == -1;
-    });
+    for (let i = 0; i < commonWords.length; i++) {
+      for (let j = 0; j < words.length; j++) {
+        if (words[j].includes(commonWords[i].text)) {
+          commonWords.splice(i, 1);
+          i--;
+          break;
+        }
+      }
+    }
+
+    return commonWords;
   }
 
   reset() {
