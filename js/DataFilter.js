@@ -17,15 +17,11 @@ class DataFilter {
   filterEvents(typeFilter, words) {
     typeFilter = new RegExp(typeFilter.replace(/\(/g, "\\(").replace(/\)/g, "\\)"));
     let newData = [];
+    let commonWords = [];
 
     for (let i = 0; i < this.filteredData.length; i++) {
       if (!typeFilter.test(this.filteredData[i].EVENT_TYPE))
         continue;
-
-      if (!words) {
-        newData[newData.length] = this.filteredData[i];
-        continue;
-      }
 
       let description = this.filteredData[i].EVENT_NARRATIVE.split(" ");
 
@@ -38,24 +34,49 @@ class DataFilter {
         }
       }, description);
 
-      description.filter(function(entry) {
+      description = description.filter(function(entry) {
         return entry != null;
       })
 
       let shouldAdd = true;
-      for (let j = 0; j < words.length; j++) {
-        if (description.indexOf(words[j]) == -1) {
-          shouldAdd = false;
-          break;
+      if (words) {
+        let copy = words.slice();
+        for (let j = 0; j < description.length; j++) {
+          if (words.length == 0)
+            break;
+          let index;
+          if ((index = words.indexOf(description[i])) != -1) {
+            words.splice(index, 1);
+          }
+        }
+        if (words.length == 0) {
+          shouldAdd = true;
         }
       }
 
       if (shouldAdd) {
+        description.forEach(function(entry) {
+          let index = -1;
+          if ((index = commonWords.findIndex(function(word) {
+            return word.word == entry;
+          })) != -1) {
+            commonWords[index].count++;
+          } else {
+            commonWords[commonWords.length] = {
+              "word" : entry,
+              "count" : 1
+            };
+          }
+        });
         newData[newData.length] = this.filteredData[i];
       }
     }
 
     this.filteredData = newData;
+
+    return commonWords.sort(function(a,b) {
+      return b.count - a.count;
+    });
   }
 
   reset() {
