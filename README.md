@@ -1,6 +1,6 @@
 # StormEvents
-[![ScreenShot](https://github.com/davidcooper1/StormEvents/blob/master/ReportScreenshot.PNG)]()
-Click on the above screenshot to be redirected to the video, or if you are unable, click [here]().
+[![ScreenShot](https://github.com/davidcooper1/StormEvents/blob/master/ReportScreenshot.PNG)](https://youtu.be/sJwbzOmhm0k)
+Click on the above screenshot to be redirected to the video, or if you are unable, click [here](https://youtu.be/sJwbzOmhm0k).
 
 [--------------------------------------------------CLICK HERE FOR PROJECT-----------------------------------------------------------](https://davidcooper1.github.io/StormEvents/)
 
