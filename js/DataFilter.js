@@ -38,18 +38,18 @@ class DataFilter {
         return entry != null;
       })
 
-      let shouldAdd = true;
+      let shouldAdd = false;
       if (words) {
         let copy = words.slice();
         for (let j = 0; j < description.length; j++) {
-          if (words.length == 0)
+          if (copy.length == 0)
             break;
           let index;
-          if ((index = words.indexOf(description[i])) != -1) {
+          if ((index = copy.indexOf(description[j])) != -1) {
             copy.splice(index, 1);
           }
         }
-        if (words.length == 0) {
+        if (copy.length == 0) {
           shouldAdd = true;
         }
       }

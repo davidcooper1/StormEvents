@@ -103,9 +103,6 @@ class USMap {
 
     var colorScale = d3.scaleSequential(d3.interpolateInferno).domain([minFreq, maxFreq]);
 
-    console.log(maxFreq);
-    console.log(heatData);
-
     this.paths.style("fill", function(d) {
       var stateFips = parseInt(d.properties.STATE);
       var czFips = parseInt(d.properties.COUNTY);
