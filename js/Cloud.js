@@ -46,7 +46,8 @@ class Cloud {
             .attr("transform", function(d) {
                 return "translate(" + [d.x, d.y] + ")rotate(" + d.rotate + ")";
             })
-            .style("fill-opacity", 1);
+            .style("fill-opacity", 1)
+            .text(function(d) { return d.text });
 
         text.exit()
             .transition()

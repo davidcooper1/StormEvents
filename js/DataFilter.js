@@ -74,8 +74,12 @@ class DataFilter {
 
     this.filteredData = newData;
 
-    return commonWords.sort(function(a,b) {
+    commonWords = commonWords.sort(function(a,b) {
       return b.size - a.size;
+    });
+
+    return commonWords.filter(function(entry) {
+      return words.indexOf(entry.text) == -1;
     });
   }
 

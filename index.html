@@ -123,7 +123,7 @@
       })
       e.init()
 
-      function selectEvents() {
+      function getSelectedEvents() {
         let eventRegexStr = "";
         $("li").each(function() {
           let ele = $(this);
@@ -132,6 +132,11 @@
         });
         if (eventRegexStr == "")
           eventRegexStr = "a^"
+        return eventRegexStr;
+      }
+
+      function selectEvents() {
+        let eventRegexStr = getSelectedEvents();
         filter.reset();
         cloud.data = filter.filterEvents(eventRegexStr, []).splice(0,50);
         map.applyHeatMap(filter.heatMap, needsNormalize());
@@ -153,12 +158,36 @@
       }
 
       function useWord(word) {
-          let newAlert = "<div class=\"alert alert-dark alert-dismissible fade show\" role=\"alert\"> <strong>\""
-                  + word + "\"</strong> <button type=\"button\" class=\"close\" data-dismiss=\"alert\" " +
-                  "aria-label=\"Close\"> <span aria-hidden=\"true\">&times;</span> </button> </div>";
-          $("#alertList").append(newAlert);
+        let newAlert = "<div word=\"" + word + "\" class=\"alert alert-dark alert-dismissible fade show\" role=\"alert\"> <strong>\""
+                + word + "\"</strong> <button type=\"button\" class=\"close\" data-dismiss=\"alert\" " +
+                "aria-label=\"Close\"> <span aria-hidden=\"true\">&times;</span> </button> </div>";
+        $("#alertList").append(newAlert);
+        $("#alertList").children().on("closed.bs.alert", function() {
+          resetFilter();
+        });
+        words = filter.filterEvents("", getUsedWords())
+        console.log(words);
+        cloud.data = words;
+        map.applyHeatMap(filter.heatMap, needsNormalize());
+      }
 
-        //TODO now filter for used words
+      function getUsedWords() {
+        let words = []
+        $("#alertList").children().each(function (e) {
+          let word = $(this).attr("word");
+          words[words.length] = word;
+        });
+        console.log(words);
+        return words;
+      }
+
+      function resetFilter() {
+        filter.reset();
+        let eventRegexStr = getSelectedEvents();
+        let words = getUsedWords();
+        console.log(words);
+        cloud.data = filter.filterEvents(eventRegexStr, words).splice(0,50);
+        map.applyHeatMap(filter.heatMap, needsNormalize());
       }
     </script>
   </body>
