@@ -3,27 +3,28 @@ class USMap {
     this.width = width
     this.height = height
     var colorScale = d3.scaleSequential(d3.interpolateInferno)
-        .domain([0, this.width/2])
+        .domain([0, this.height/2])
     this.svg = document.createElementNS(d3.namespaces.svg, "svg");
     this.content = d3.select(this.svg)
       .attr("viewBox", "0 0 " + this.width + " " + this.height)
       .append("g");
     this.bars = this.content.selectAll("rect")
-        .data(d3.range(this.width/2), function(d) { return d; })
+        .data(d3.range(this.height/2), function(d) { return d; })
         .enter().append("rect")
         .attr("class", "bars")
-        .attr("x", function(d, i) { return i; })
-        .attr("y", this.height * .9)
-        .attr("height", 20)
-        .attr("width", 1)
+        .attr("x",this.width * .99)
+        .attr("y", function(d, i) { return 450 - i; })
+        .attr("height", 2)
+        .attr("width", 20)
         .style("fill", function(d, i ) { return colorScale(d); }.bind(this));
     var frame = d3.select(this.svg)
         .append("rect")
-        .attr("x", "0")
-        .attr("y", this.height * 0.9)
-        .attr("width", this.width / 2)
-        .attr("height", "20")
+        .attr("x",this.width * .99)
+        .attr("y", "200")
+        .attr("width", "20")
+        .attr("height", "250")
         .attr("fill","none")
+        .attr("stroke", "black")
     this.usa = d3.geoAlbersUsa()
       .translate([this.width / 2, this.height / 2])
       .scale([1000]);
