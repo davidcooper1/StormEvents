@@ -43,7 +43,25 @@
         <div class="col-4 p-0">
           <div class="card w-100" style="height:400px">
             <div class="card-header bg-dark-red text-white">Words Used</div>
-            <div class="card-body">
+            <div id="alertList" class="card-body">
+              <div class="alert alert-dark alert-dismissible fade show" role="alert">
+                <strong>"thunderstorm"</strong>
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+              <div class="alert alert-dark alert-dismissible fade show" role="alert">
+                <strong>"limb"</strong>
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+              <div class="alert alert-dark alert-dismissible fade show" role="alert">
+                <strong>"powerful"</strong>
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
             </div>
           </div>
         </div>
@@ -154,6 +172,16 @@
 
       function needsNormalize() {
         return $("#norm").hasClass("active");
+      }
+
+      function useWord(arr) {
+        for (var i = 0; i < arr.length; i++){
+          let newAlert = "<div class=\"alert alert-dark alert-dismissible fade show\" role=\"alert\"> <strong>\""
+                  + arr[i] + "\"</strong> <button type=\"button\" class=\"close\" data-dismiss=\"alert\" " +
+                  "aria-label=\"Close\"> <span aria-hidden=\"true\">&times;</span> </button> </div>";
+          $("#alertList").append(newAlert);
+        }
+        //TODO now filter for used words
       }
     </script>
   </body>
