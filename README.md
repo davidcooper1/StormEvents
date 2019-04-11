@@ -1,5 +1,5 @@
 # StormEvents
-[--------------------------------------------------CLICK HERE FOR PROJECT------------------------------------------------------------](https://davidcooper1.github.io/StormEvents/)
+[--------------------------------------------------CLICK HERE FOR PROJECT-----------------------------------------------------------](https://davidcooper1.github.io/StormEvents/)
 
 ## The Data
 
