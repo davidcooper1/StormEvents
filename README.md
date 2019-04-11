@@ -1,4 +1,5 @@
 # StormEvents
+[--------------------------------------------------CLICK HERE FOR PROJECT-----------------------------------------------------------](https://davidcooper1.github.io/StormEvents/)
 
 ## The Data
 
@@ -20,3 +21,7 @@ The links for each can be found here:
 ## US Map of Storm Events
 
 This US map is split up by county and displays a normalized version of the data set given to use by the NOAA storm events database. We did calculations on the occurences to account for some counties being larger sized than others. With this in mind, it allowed us to get a more accurate view on which counties had a higher number of occurences per area. There are a few ways to modify that data in our application. We have a category list which is populated by the type of events in the database. By selecting one or multiple, you can see the counties with the highest occurence of that event type per area. When no category is selected, by default, it shows the counties with the highest overall event occurence. There is also the map control section which allows the user to normalize the data. However, if the user wants to see the raw data, without normalization, they can select raw and the heat map will display as such.
+
+## Word Cloud
+
+The Word Cloud displays the top 50 terms that occur the most in the descriptions of events. When selecting an event type in the category selector, it filters to get the top 50 terms of the description only of the event type selected. The size of the font of each word is based on the number of time that word occurs in the given descriptions. The words themselves are clickable and when clicked on add the clicked word to the Words Used tab. These words now filter the descriptions for the top 50 related words to the event selected and the words selected.
