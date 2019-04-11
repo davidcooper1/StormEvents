@@ -20,11 +20,17 @@ class Cloud {
     }
 
     draw() {
-        this.g
+        let text = this.g
             .attr("transform", "translate(" + this.layout.size()[0] / 2 + "," + this.layout.size()[1] / 2 + ")")
             .selectAll("text")
-            .data(this.d)
+            .data(this.d, function(d) { return d.text; });
+
+        text
             .enter().append("text")
+            .on("click", function(e) {
+                let selection = d3.select(this);
+                useWord(selection.datum().text);
+            })
             .style("font-size", function(d) { return d.size + "px"; })
             .style("font-family", "Impact")
             .attr("text-anchor", "middle")
@@ -32,6 +38,22 @@ class Cloud {
                 return "translate(" + [d.x, d.y] + ")rotate(" + d.rotate + ")";
             })
             .text(function(d) { return d.text; });
+
+        text
+            .transition()
+            .duration(600)
+            .style("font-size", function(d) { return d.size + "px"; })
+            .attr("transform", function(d) {
+                return "translate(" + [d.x, d.y] + ")rotate(" + d.rotate + ")";
+            })
+            .style("fill-opacity", 1);
+
+        text.exit()
+            .transition()
+            .duration(200)
+            .style("fill-opacity", 0)
+            .attr("font-size", 1)
+            .remove();
     }
     set data(newData) {
         this.d = newData;
