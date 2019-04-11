@@ -120,6 +120,9 @@
             selectEvents();
           })
           $(".normoption").on("click", normRaw);
+
+          $("li:contains('Drought')").addClass("opt-selected");
+          selectEvents();
       })
       e.init()
 
@@ -134,7 +137,7 @@
           eventRegexStr = "a^"
         console.log(eventRegexStr);
         filter.reset();
-        filter.filterEvents(eventRegexStr);
+        filter.filterEvents(eventRegexStr, []);
         map.applyHeatMap(filter.heatMap, needsNormalize());
       }
 
