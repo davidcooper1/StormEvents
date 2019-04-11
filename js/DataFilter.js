@@ -58,13 +58,13 @@ class DataFilter {
         description.forEach(function(entry) {
           let index = -1;
           if ((index = commonWords.findIndex(function(word) {
-            return word.word == entry;
+            return word.text == entry;
           })) != -1) {
-            commonWords[index].count++;
+            commonWords[index].size++;
           } else {
             commonWords[commonWords.length] = {
-              "word" : entry,
-              "count" : 1
+              "text" : entry,
+              "size" : 1
             };
           }
         });
@@ -75,7 +75,7 @@ class DataFilter {
     this.filteredData = newData;
 
     return commonWords.sort(function(a,b) {
-      return b.count - a.count;
+      return b.size - a.size;
     });
   }
 

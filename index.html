@@ -92,7 +92,7 @@
       let eventData = [];
       let map, cloud, filter;
 
-      e.on("data", function(data) {
+      e.on("end", function(data) {
           states = {}
           counties = []
 
@@ -155,7 +155,7 @@
           eventRegexStr = "a^"
         console.log(eventRegexStr);
         filter.reset();
-        filter.filterEvents(eventRegexStr, []);
+        console.log(filter.filterEvents(eventRegexStr, []));
         map.applyHeatMap(filter.heatMap, needsNormalize());
       }
 
